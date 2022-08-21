@@ -1,0 +1,80 @@
+[{
+    "content": "群聊设置",
+    "usage": "群聊设置",
+    "promise": "anyone",
+    "eval": "basic.printConfig()",
+    "description": "查看群聊的设置",
+    "mode": "群聊管理",
+    "isHide": 0,
+    "type": "message"
+},
+{
+    "content": "func ",
+    "usage": "func <要执行的语句>",
+    "promise": "xzy",
+    "eval": "basic.runFunc()",
+    "description": "执行语句",
+    "mode": "机器人操作",
+    "isHide": 0,
+    "type": "message"
+},
+{
+    "content": "回复|",
+    "usage": "见机器人的私聊提示",
+    "promise": "owner",
+    "eval": "basic.replyPM()",
+    "description": "回复私聊消息",
+    "mode": "机器人操作",
+    "isHide": 1,
+    "type": "message"
+},
+{
+    "content": "完整菜单",
+    "usage": "完整菜单",
+    "promise": "anyone",
+    "eval": "basic.cd()",
+    "description": "查看完整菜单",
+    "mode": "机器人操作",
+    "isHide": 0,
+    "type": "message"
+},
+{
+    "content": "菜单",
+    "usage": "菜单",
+    "promise": "anyone",
+    "eval": "basic.cd2()",
+    "description": "分类菜单",
+    "mode": "机器人操作",
+    "isHide": 0,
+    "type": "message"
+},
+{
+    "content": "指令帮助 ",
+    "usage": "指令帮助 <指令内容>",
+    "promise": "anyone",
+    "eval": "basic.commandhelp()",
+    "description": "查看指令帮助",
+    "mode": "机器人操作",
+    "isHide": 0,
+    "type": "message"
+},
+{
+    "content": "转图片 ",
+    "usage": "转图片 <消息内容>",
+    "promise": "owner",
+    "eval": "basic.sendImage()",
+    "description": "将文字转为图片",
+    "mode": "实用工具",
+    "isHide": 0,
+    "type": "message"
+},
+{
+    "content": "改权限 ",
+    "usage": "改权限 <指令内容> <权限>",
+    "promise": "xzy",
+    "eval": "basic.changePromise()",
+    "description": "更改某指令在本群的使用权限",
+    "mode": "机器人操作",
+    "isHide": 0,
+    "type": "message"
+}]
