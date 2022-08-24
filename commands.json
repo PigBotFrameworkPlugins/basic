@@ -6,7 +6,7 @@
     "description": "查看群聊的设置",
     "mode": "群聊管理",
     "isHide": 0,
-    "type": "message"
+    "type": "command"
 },
 {
     "content": "func ",
@@ -16,7 +16,7 @@
     "description": "执行语句",
     "mode": "机器人操作",
     "isHide": 0,
-    "type": "message"
+    "type": "command"
 },
 {
     "content": "回复|",
@@ -26,7 +26,7 @@
     "description": "回复私聊消息",
     "mode": "机器人操作",
     "isHide": 1,
-    "type": "message"
+    "type": "command"
 },
 {
     "content": "完整菜单",
@@ -36,7 +36,7 @@
     "description": "查看完整菜单",
     "mode": "机器人操作",
     "isHide": 0,
-    "type": "message"
+    "type": "command"
 },
 {
     "content": "菜单",
@@ -46,7 +46,7 @@
     "description": "分类菜单",
     "mode": "机器人操作",
     "isHide": 0,
-    "type": "message"
+    "type": "command"
 },
 {
     "content": "指令帮助 ",
@@ -56,7 +56,7 @@
     "description": "查看指令帮助",
     "mode": "机器人操作",
     "isHide": 0,
-    "type": "message"
+    "type": "command"
 },
 {
     "content": "转图片 ",
@@ -66,7 +66,7 @@
     "description": "将文字转为图片",
     "mode": "实用工具",
     "isHide": 0,
-    "type": "message"
+    "type": "command"
 },
 {
     "content": "改权限 ",
@@ -76,5 +76,5 @@
     "description": "更改某指令在本群的使用权限",
     "mode": "机器人操作",
     "isHide": 0,
-    "type": "message"
+    "type": "command"
 }]

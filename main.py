@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../..')
-from bot import bot, commandlist, commandPluginsList
+from bot import bot, commandlist, commandPluginsList, webreloadPlugins
 
 class basic(bot):
     def printConfig(self):
