@@ -64,7 +64,7 @@
     "promise": "owner",
     "eval": "basic.sendImage()",
     "description": "将文字转为图片",
-    "mode": "实用工具",
+    "mode": "实用功能",
     "isHide": 0,
     "type": "command"
 },
