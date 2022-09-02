@@ -71,10 +71,30 @@
 {
     "content": "改权限 ",
     "usage": "改权限 <指令内容> <权限>",
-    "promise": "xzy",
+    "promise": "admin",
     "eval": "basic.changePromise()",
     "description": "更改某指令在本群的使用权限",
     "mode": "机器人操作",
     "isHide": 0,
     "type": "command"
+},
+{
+    "content": "Request上报基本功能",
+    "usage": "",
+    "promise": "anyone",
+    "eval": "basic.requestListener()",
+    "description": "监听request事件",
+    "mode": "机器人操作",
+    "isHide": 1,
+    "type": "request"
+},
+{
+    "content": "Notice上报基本功能",
+    "usage": "",
+    "promise": "anyone",
+    "eval": "basic.noticeListener()",
+    "description": "监听notice事件",
+    "mode": "机器人操作",
+    "isHide": 1,
+    "type": "notice"
 }]

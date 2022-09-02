@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../..')
-from bot import bot, commandlist, commandPluginsList, webreloadPlugins
+from bot import bot, commandlist, commandPluginsList, webreloadPlugins, yamldata
 
 class basic(bot):
     def printConfig(self):
@@ -138,3 +138,87 @@ class basic(bot):
             self.send('[CQ:face,id=161] 更改成功！')
         else:
             self.send('[CQ:face,id=171] 该指令禁止更改权限或该指令不存在！')
+            
+    def requestListener(self):
+        se = self.se
+        botSettings = self.botSettings
+        uid = se.get('user_id')
+        settings = self.groupSettings
+        gid = se.get('group_id')
+        
+        if se.get('request_type') == 'group':
+            if se.get('sub_type') == 'invite' and botSettings.get('autoAcceptGroup') and self.isGlobalBanned == None:
+                # 邀请机器人加群
+                print('group invite')
+                return '{"approve":true}'
+            elif uid == yamldata.get('chat').get('owner'):
+                # 最高管理员一律同意
+                print('group invite')
+                return '{"approve":true}'
+            elif settings.get('autoAcceptGroup') != 0 and se.get('sub_type') == 'add':
+                # 有人要加群
+                print('group add')
+                if self.isGlobalBanned == None:
+                    return '{"approve":true}'
+                else:
+                    self.SendOld(botSettings.get('owner'), '[CQ:face,id=151] 已禁止用户'+str(uid)+'加群\n原因：'+self.isGlobalBanned.get('reason'), gid)
+                
+            elif settings.get('autoAcceptGroup') == 0:
+                self.send('[CQ:face,id=151] 管理员快来，有人要加群！')
+                
+        elif se.get('request_type') == 'friend' and botSettings.get('autoAcceptFriend'):
+            print('friend')
+            if self.isGlobalBanned == None:
+                return '{"approve":true}'
+            else:
+                self.SendOld(botSettings.get('owner'), '[CQ:face,id=151] 已禁止用户'+str(uid)+'加好友\n原因：'+ob.get('reason'), gid)
+                self.SendOld(botSettings.get('second_owner'), '[CQ:face,id=151] 已禁止用户'+str(uid)+'加好友\n原因：'+ob.get('reason'), gid)
+                
+    def noticeListener(self):
+        userCoin = self.userCoin
+        se = self.se
+        gid = se.get('group_id')
+        cid = se.get('channel_id')
+        uid = se.get('user_id')
+        message = se.get('message')
+        settings = self.groupSettings
+        uuid = self.uuid
+        botSettings = self.botSettings
+        
+        if se.get('notice_type') == 'group_ban' and se.get('user_id') == se.get('self_id'):
+            # 禁言机器人
+            # checkBan(meta_data)
+            pass
+        
+        elif se.get('notice_type') == 'group_recall' and settings.get('recallFlag') != 0 and se.get('operator_id') != botSettings.get('myselfqn') and se.get('user_id') != botSettings.get('myselfqn'):
+            # 消息防撤回
+            data = self.CallApi('get_msg', {"message_id":se.get('message_id')})
+            if self.weijinWhileFunc(data.get('data').get('message')) == False and 'http' not in data.get('data').get('message'):
+                self.send('[CQ:face,id=161] 消息防撤回\n[CQ:at,qq='+str(se.get('operator_id'))+'] 撤回了 [CQ:at,qq='+str(se.get('user_id'))+'] 发送的一条消息\n撤回的消息内容：'+str(data.get('data').get('message')))
+            else:
+                self.send('[CQ:at,qq='+str(se.get('operator_id'))+'] 撤回了 [CQ:at,qq='+str(se.get('user_id'))+'] 发送的一条不可见人的消息')
+            
+        elif se.get('notice_type') == 'notify':
+            # 戳机器人
+            if se.get('sub_type') == 'poke' and se.get('target_id') == botSettings.get('myselfqn'):
+                self.send('[CQ:at,qq='+str(se.get('user_id'))+'] 不要再戳我啦！')
+                
+        elif se.get('notice_type') == 'group_increase' and settings.get('increase') != 0:
+            # 有人进群
+            self.send('[CQ:at,qq='+str(se.get('user_id'))+'] '+str(settings.get('increase_notice')))
+            
+        elif se.get('notice_type') == 'group_decrease' and settings.get('decrease') != 0:
+            # 有人退群
+            if se.get('sub_type') == 'leave':
+                self.send('成员 '+str(se.get('user_id'))+' 主动离开了本群。')
+            elif 'kick' in se.get('sub_type'):
+                self.send('成员 '+str(se.get('user_id'))+' 被 [CQ:at,qq='+str(se.get('operator_id'))+'] 踢出了本群。')
+        
+        elif se.get('notice_type') == 'essence':
+            # 精华消息
+            if se.get('sub_type') == 'add' and settings.get('delete_es') != 0:
+                self.CallApi('delete_essence_msg', {'message_id':se.get('message_id')})
+                self.send('已自动撤回成员[CQ:at,qq={0}]设置的精华消息'.format(se.get('sender_id')))
+            elif se.get('sub_type') == 'delete' and se.get('operator_id') != botSettings.get('myselfqn'):
+                data = self.CallApi('get_msg', {"message_id":se.get('message_id')})
+                self.send('很不幸，[CQ:at,qq={0}]撤回了一个精华消息\n消息内容：{1}'.format(se.get('operator_id'), data.get('data').get('message')))
