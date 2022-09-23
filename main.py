@@ -1,4 +1,4 @@
-import sys
+import sys, time, traceback, datetime
 sys.path.append('../..')
 from bot import bot, commandlist, commandPluginsList, webreloadPlugins, yamldata
 
@@ -30,7 +30,8 @@ class basic(bot):
             try:
                 exec(message)
             except Exception as e:
-                self.send('[CQ:face,id=189] 错误截获\n{0}'.format(e))
+                msg = traceback.format_exc()
+                self.send('[CQ:face,id=189] 错误截获\n{0}'.format(msg))
                 
     def replyPM(self):
         uid = self.se.get('user_id')
@@ -203,9 +204,12 @@ class basic(bot):
             if se.get('sub_type') == 'poke' and se.get('target_id') == botSettings.get('myselfqn'):
                 self.send('[CQ:at,qq='+str(se.get('user_id'))+'] 不要再戳我啦！')
                 
-        elif se.get('notice_type') == 'group_increase' and settings.get('increase') != 0:
+        elif se.get('notice_type') == 'group_increase':
             # 有人进群
-            self.send('[CQ:at,qq='+str(se.get('user_id'))+'] '+str(settings.get('increase_notice')))
+            if settings.get('increase') != 0:
+                self.send('[CQ:at,qq='+str(se.get('user_id'))+'] '+str(settings.get('increase_notice')))
+            if settings.get('increase_verify') != 0:
+                self.increaseVerify()
             
         elif se.get('notice_type') == 'group_decrease' and settings.get('decrease') != 0:
             # 有人退群
@@ -222,3 +226,51 @@ class basic(bot):
             elif se.get('sub_type') == 'delete' and se.get('operator_id') != botSettings.get('myselfqn'):
                 data = self.CallApi('get_msg', {"message_id":se.get('message_id')})
                 self.send('很不幸，[CQ:at,qq={0}]撤回了一个精华消息\n消息内容：{1}'.format(se.get('operator_id'), data.get('data').get('message')))
+    
+    def increaseVerifyCommand(self):
+        uid = self.se.get('user_id')
+        gid = self.se.get('group_id')
+        for i in range(len(increaseVerifyList)):
+            if increaseVerifyList[i].get('uid') == uid and increaseVerifyList[i].get('gid') == gid:
+                if increaseVerifyList[i].get('pswd') == self.message:
+                    increaseVerifyList[i]['pswd'] = None
+                else:
+                    self.send('你这验证码太假了！')
+                break
+    
+    def increaseVerify(self):
+        uid = self.se.get('user_id')
+        gid = self.se.get('group_id')
+        pswd = self.generate_code(4)
+        limit = self.groupSettings.get('increase_verify')
+        increaseVerifyList.append({"uid":uid,"gid":gid,"pswd":pswd})
+        self.send('[CQ:at,qq={0}]\n请在{1}秒内发送指令“人机验证 {2}”\n注意中间有空格！'.format(uid, limit, pswd))
+        l = 0
+        for i in range(len(increaseVerifyList)):
+            if increaseVerifyList[i].get('uid') == uid and increaseVerifyList[i].get('gid') == gid:
+                l = i
+                break
+        while limit >= 0:
+            if increaseVerifyList[l].get('pswd') == None:
+                increaseVerifyList[l]["pswd"] = "continue"
+                self.send('[CQ:at,qq={0}] 恭喜，验证通过！'.format(uid))
+                increaseVerifyList.pop(l)
+                return
+            limit -= 1
+            time.sleep(1)
+        self.send('[CQ:at,qq={0}] 到时间啦，飞机票一张！'.format(uid))
+        self.CallApi('set_group_kick', {'group_id':gid,'user_id':uid})
+        increaseVerifyList.remove(l)
+    
+    def getVerifyStatus(self):
+        for i in range(len(increaseVerifyList)):
+            if increaseVerifyList[i].get('uid') == self.se.get('user_id') and increaseVerifyList[i].get('gid') == self.se.get('group_id'):
+                if increaseVerifyList[l]["pswd"] == "continue":
+                    return False
+                return True
+        return False
+    
+    def pythonTime(self):
+        self.send(time.ctime())
+
+increaseVerifyList = []

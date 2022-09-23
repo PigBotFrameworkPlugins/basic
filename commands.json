@@ -79,6 +79,16 @@
     "type": "command"
 },
 {
+    "content": "人机验证 ",
+    "usage": "见提示",
+    "promise": "anyone",
+    "eval": "basic.increaseVerifyCommand()",
+    "description": "入群人机验证",
+    "mode": "群聊管理",
+    "isHide": 1,
+    "type": "command"
+},
+{
     "content": "Request上报基本功能",
     "usage": "",
     "promise": "anyone",
@@ -97,4 +107,14 @@
     "mode": "机器人操作",
     "isHide": 1,
     "type": "notice"
+},
+{
+    "content": "程序运行时间",
+    "usage": "程序运行时间",
+    "promise": "anyone",
+    "eval": "basic.pythonTime()",
+    "description": "",
+    "mode": "机器人操作",
+    "isHide": 0,
+    "type": "command"
 }]
