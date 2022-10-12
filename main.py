@@ -1,6 +1,8 @@
-import sys, time, traceback, datetime
+import sys, time, traceback, datetime, random
 sys.path.append('../..')
-from bot import bot, commandlist, commandPluginsList, webreloadPlugins, yamldata
+from bot import bot, commandlist, commandPluginsList
+from fabot import reloadPlugins, yamldata
+import nsfw.classify_nsfw as nsfw
 
 class basic(bot):
     def printConfig(self):
@@ -13,10 +15,10 @@ class basic(bot):
             if int(i.get('isHide')) == 1:
                 continue
             
-            message += '\n[CQ:face,id=161] '+str(i.get('name'))+'：'+str(i.get('description'))+'\n     值：'+str(settings.get(i.get('description')))
+            message += '\n[CQ:face,id=54] '+str(i.get('name'))+'：[|'+str(i.get('description'))+'|]\n     值：[|'+str(settings.get(i.get('description')))+'|]'
             if i.get('other') != '':
                 message += '\n     描述：'+str(i.get('other'))
-        message += '\n\n[CQ:face,id=189] 请使用 set 指令修改配置\n例如：set recallFlag===0 即为设置取消防撤回功能'
+        message += '\n\n[CQ:face,id=189] [|请使用 set 指令修改配置|]\n[|例如：set recallFlag===0 即为设置取消防撤回功能|]'
         self.send(message)
         
     def runFunc(self):
@@ -64,7 +66,7 @@ class basic(bot):
                     promisetext = '真正的主人'
                 elif i.get('promise') == 'xzy':
                     promisetext = '最高管理员'
-                self.send('[CQ:face,id=189] 指令帮助\n[CQ:face,id=161] 指令内容：'+str(i.get('content'))+'\n[CQ:face,id=161] 指令用法：'+str(i.get('usage'))+'\n[CQ:face,id=161] 指令解释：'+str(i.get('description'))+'\n[CQ:face,id=161] 指令权限：'+promisetext+'\n[CQ:face,id=161] 指令分类：'+str(i.get('mode')))
+                self.send('[CQ:face,id=189] 指令帮助\n[CQ:face,id=54] 指令内容：'+str(i.get('content'))+'\n[CQ:face,id=54] 指令用法：'+str(i.get('usage'))+'\n[CQ:face,id=54] 指令解释：'+str(i.get('description'))+'\n[CQ:face,id=54] 指令权限：'+promisetext+'\n[CQ:face,id=54] 指令分类：'+str(i.get('mode')))
                 return 
         self.send('没有这个指令呢qwq')
         
@@ -74,7 +76,7 @@ class basic(bot):
         
         message = '[CQ:face,id=151]{0}-菜单'.format(self.botSettings.get('name'))
         for i in commandlist:
-            message += '\n[CQ:face,id=161] '+i.get('content')+'\n用法：'+i.get('usage')+'\n解释：'+i.get('description')+'\n权限：'
+            message += '\n[CQ:face,id=54] '+i.get('content')+'\n用法：'+i.get('usage')+'\n解释：'+i.get('description')+'\n权限：'
             if i.get('promise') == 'admin' or i.get('promise') == 'ao':
                 message += '管理员'
             elif i.get('promise') == 'owner':
@@ -103,17 +105,17 @@ class basic(bot):
         for i in self.commandmode:
             if self.findObject('path', i.get('cwd'), self.pluginsList).get('num') != -1 or i.get('cwd')=='':
                 if num < 2:
-                    message += '\n[CQ:face,id=60] '+str(i.get('name'))
+                    message += '\n[CQ:face,id=60] [|{0}|]'.format(i.get('name'))
                     num += 1
                 else:
-                    message += '   '+str(i.get('name'))+' [CQ:face,id=60]'
+                    message += '   [|{0}|] [CQ:face,id=60]'.format(i.get('name'))
                     num = 1
             
             # if findObject('path', i.get('cwd'), pluginsList).get('num') != -1:
                 # message += '\n[CQ:face,id=189] '+str(i.get('name'))
         
-        message += '\n[CQ:face,id=161] 发送上面的选项名 （注意大小写）即可查看对应的详细指令列表\n在使用指令时尖括号(<>)和方括号分别表示必须的项和可选的项，使用指令时不需要带有这些括号！'
-        message += '\n\n{0} POWERED BY PIGBOTFRAMEWORK'.format(self.botSettings.get('name'))
+        message += '\n[CQ:face,id=54] 发送上面的选项名（注意大小写，不包括[]中括号）即可查看对应的详细指令列表\n在使用指令时尖括号(<>)和方括号分别表示必须的项和可选的项，使用指令时不需要带有这些括号！'
+        message += '\n\n[ {0} POWERED BY PIGBOTFRAMEWORK ]'.format(self.botSettings.get('name'))
         self.send(message)
         
     def changePromise(self):
@@ -136,7 +138,7 @@ class basic(bot):
                 self.commonx('UPDATE `botPromise` SET `promise`="{0}" WHERE `id`={1}'.format(promise, commandCustom[0].get('id')))
             else:
                 self.commonx('INSERT INTO `botPromise` (`uuid`,`gid`,`command`,`promise`) VALUES ("{0}", {1}, "{2}", "{3}")'.format(uuid, gid, command, promise))
-            self.send('[CQ:face,id=161] 更改成功！')
+            self.send('[CQ:face,id=54] 更改成功！')
         else:
             self.send('[CQ:face,id=171] 该指令禁止更改权限或该指令不存在！')
             
@@ -195,14 +197,17 @@ class basic(bot):
             # 消息防撤回
             data = self.CallApi('get_msg', {"message_id":se.get('message_id')})
             if self.weijinWhileFunc(data.get('data').get('message')) == False and 'http' not in data.get('data').get('message'):
-                self.send('[CQ:face,id=161] 消息防撤回\n[CQ:at,qq='+str(se.get('operator_id'))+'] 撤回了 [CQ:at,qq='+str(se.get('user_id'))+'] 发送的一条消息\n撤回的消息内容：'+str(data.get('data').get('message')))
+                self.send('[CQ:face,id=54] 消息防撤回\n[CQ:at,qq='+str(se.get('operator_id'))+'] 撤回了 [CQ:at,qq='+str(se.get('user_id'))+'] 发送的一条消息\n撤回的消息内容：'+str(data.get('data').get('message')))
             else:
                 self.send('[CQ:at,qq='+str(se.get('operator_id'))+'] 撤回了 [CQ:at,qq='+str(se.get('user_id'))+'] 发送的一条不可见人的消息')
             
         elif se.get('notice_type') == 'notify':
             # 戳机器人
             if se.get('sub_type') == 'poke' and se.get('target_id') == botSettings.get('myselfqn'):
-                self.send('[CQ:at,qq='+str(se.get('user_id'))+'] 不要再戳我啦！')
+                if random.randint(0, 2) == 1:
+                    self.send('[CQ:at,qq='+str(se.get('user_id'))+'] 我爱你，別戳了！')
+                else:
+                    self.send('[CQ:at,qq='+str(se.get('user_id'))+'] 不要再戳我啦！')
                 
         elif se.get('notice_type') == 'group_increase':
             # 有人进群
@@ -272,5 +277,8 @@ class basic(bot):
     
     def pythonTime(self):
         self.send(time.ctime())
+    
+    def pornCheckFunc(self):
+        self.send(nsfw.main("/pbf/resources/porn.png"))
 
 increaseVerifyList = []

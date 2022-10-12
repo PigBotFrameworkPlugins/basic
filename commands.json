@@ -117,4 +117,14 @@
     "mode": "机器人操作",
     "isHide": 0,
     "type": "command"
+},
+{
+    "content": "st测试",
+    "usage": "黄图测试",
+    "promise": "owner",
+    "eval": "basic.pornCheckFunc()",
+    "description": "",
+    "mode": "机器人操作",
+    "isHide": 1,
+    "type": "command"
 }]
