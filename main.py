@@ -274,7 +274,23 @@ class basic(bot):
     def pythonTime(self):
         self.send(time.ctime())
     
-    def pornCheckFunc(self):
-        self.send(nsfw.main("/pbf/resources/porn.png"))
+    def notice(self):
+        self.CrashReport("bot notice")
+        try:
+            if self.se.get("user_id") != 2417481092:
+                return
+            botList = self.selectx('SELECT * FROM `botBotconfig`;')
+            for botItem in botList:
+                self.send(botItem.get("name"))
+                self.botSettings = botItem
+                try:
+                    groupList = self.CallApi('get_group_list', {}).get('data')
+                    for i in groupList:
+                        self.CrashReport(i.get("group_name"), "bot notice")
+                        self.SendOld(None, self.message, gid=i.get("group_id"), timeout=5)
+                except Exception:
+                    pass
+        except Exception as e:
+            self.CrashReport(traceback.format_exc(), "bot notice")
 
 increaseVerifyList = []
