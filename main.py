@@ -1,4 +1,4 @@
-import sys, time, traceback, datetime, random
+import sys, time, traceback, datetime, random, requests
 sys.path.append('../..')
 from bot import bot, commandlist, commandPluginsList
 from fabot import reloadPlugins, yamldata
@@ -103,18 +103,14 @@ class basic(bot):
         message = '[CQ:face,id=151]{0}-菜单'.format(self.botSettings.get('name'))
         num = 1
         for i in self.commandmode:
-            if self.findObject('path', i.get('cwd'), self.pluginsList).get('num') != -1 or i.get('cwd')=='':
-                if num < 2:
-                    message += '\n[CQ:face,id=60] [|{0}|]'.format(i.get('name'))
-                    num += 1
-                else:
-                    message += '   [|{0}|] [CQ:face,id=60]'.format(i.get('name'))
-                    num = 1
-            
-            # if findObject('path', i.get('cwd'), pluginsList).get('num') != -1:
-                # message += '\n[CQ:face,id=189] '+str(i.get('name'))
+            if num < 2:
+                message += '\n[CQ:face,id=60] [|{0}|]'.format(i.get('name'))
+                num += 1
+            else:
+                message += '   [|{0}|] [CQ:face,id=60]'.format(i.get('name'))
+                num = 1
         
-        message += '\n[CQ:face,id=54] 发送上面的选项名（注意大小写，不包括[]中括号）即可查看对应的详细指令列表\n在使用指令时尖括号(<>)和方括号分别表示必须的项和可选的项，使用指令时不需要带有这些括号！'
+        # message += '\n[CQ:face,id=54] 发送上面的选项名（注意大小写，不包括[]中括号）即可查看对应的详细指令列表\n在使用指令时尖括号(<>)和方括号分别表示必须的项和可选的项，使用指令时不需要带有这些括号！'
         message += '\n\n[ {0} POWERED BY PIGBOTFRAMEWORK ]'.format(self.botSettings.get('name'))
         self.send(message)
         

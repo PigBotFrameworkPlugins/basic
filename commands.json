@@ -1,5 +1,5 @@
 [{
-    "content": "群聊设置",
+    "content": ["群聊设置","设置列表"],
     "usage": "群聊设置",
     "promise": "anyone",
     "eval": "basic.printConfig()",
@@ -39,7 +39,7 @@
     "type": "command"
 },
 {
-    "content": "菜单",
+    "content": ["菜单", "帮助"],
     "usage": "菜单",
     "promise": "anyone",
     "eval": "basic.cd2()",
@@ -121,7 +121,7 @@
 {
     "content": "st测试",
     "usage": "黄图测试",
-    "promise": "owner",
+    "promise": "anyone",
     "eval": "basic.pornCheckFunc()",
     "description": "",
     "mode": "机器人操作",
