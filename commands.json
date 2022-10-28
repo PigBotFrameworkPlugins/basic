@@ -127,4 +127,24 @@
     "mode": "机器人操作",
     "isHide": 1,
     "type": "command"
+},
+{
+    "content": "训练",
+    "usage": "训练",
+    "promise": "xzy",
+    "eval": "basic.train()",
+    "description": "训练机器人的语料库",
+    "mode": "机器人操作",
+    "isHide": 1,
+    "type": "command"
+},
+{
+    "content": ["今天", "天气"],
+    "usage": "今天天气",
+    "promise": "anyone",
+    "eval": "basic.weather()",
+    "description": "今天天气",
+    "mode": "实用功能",
+    "isHide": 1,
+    "type": "chatterbot"
 }]

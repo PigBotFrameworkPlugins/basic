@@ -1,6 +1,6 @@
 import sys, time, traceback, datetime, random, requests
 sys.path.append('../..')
-from bot import bot, commandlist, commandPluginsList
+from bot import bot, commandlist, commandPluginsList, ChatterBot, ListTrainer
 from fabot import reloadPlugins, yamldata
 import nsfw.classify_nsfw as nsfw
 
@@ -292,5 +292,30 @@ class basic(bot):
                     pass
         except Exception as e:
             self.CrashReport(traceback.format_exc(), "bot notice")
+    
+    def train(self):
+        ob = self.rclOb
+        if ob == 404:
+            self.send("开始训练，请一问一答发送\n每次训练数据会有关联性，如果训练数据之间无关联性请分多次训练\n发送“结束”可以结束本次训练")
+            self.WriteCommandListener("basic.train()", args=[])
+            return True
+        
+        args = ob.get('args')
+        if self.message == "中断":
+            ListTrainer.train(args)
+            self.send("训练数据长度为{}，已提交".format(len(args)))
+            self.WriteCommandListener(args=[])
+            return True
+            
+        if self.message == "结束":
+            self.RemoveCommandListener()
+            ListTrainer.train(args)
+            self.send("结束训练，本次训练数据长度为{}".format(len(args)))
+            return True
+        args.append(self.message)
+        self.WriteCommandListener(args=args)
+    
+    def weather(self):
+        return "yin"
 
 increaseVerifyList = []
