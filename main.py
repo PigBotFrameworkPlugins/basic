@@ -186,8 +186,7 @@ class basic(bot):
         
         if se.get('notice_type') == 'group_ban' and se.get('user_id') == se.get('self_id'):
             # 禁言机器人
-            # checkBan(meta_data)
-            pass
+            self.checkBan()
         
         elif se.get('notice_type') == 'group_recall' and settings.get('recallFlag') != 0 and se.get('operator_id') != botSettings.get('myselfqn') and se.get('user_id') != botSettings.get('myselfqn'):
             # 消息防撤回
@@ -317,5 +316,21 @@ class basic(bot):
     
     def weather(self):
         return "yin"
+        
+    def checkBan(self):
+        if self.se.get("sub_type") == "lift_ban":
+            # 解禁言
+            return self.CrashReport("解禁言", "checkBan")
+        
+        self.CrashReport("群聊{}，禁言行为".format(self.se.get("group_id")), "checkBan")
+        self.commonx("UPDATE `botSettings` SET `bannedCount`={} WHERE `qn`={}".format(int(self.groupSettings.get("bannedCount"))+1, self.se.get("group_id")))
+        
+        if int(self.groupSettings.get("bannedCount"))+1 >= int(self.botSettings.get("bannedCount")):
+            # 超过次数，自动退群
+            self.CallApi('set_group_leave', {"group_id":self.se.get("group_id")})
+            self.commonx("UPDATE `botSettings` SET `bannedCount`=0 WHERE `qn`={}".format(self.se.get("group_id")))
+            if self.groupSettings.get("connectQQ"):
+                self.SendOld(self.groupSettings.get("connectQQ"), "[自动消息] 请注意，您关联的群组（{}）因违反机器人规定致使机器人退群，您将会承担连带责任".format(self.se.get("group_id")))
+            self.SendOld(self.botSettings.get("owner"), "[提示] 群：{}\n关联成员：{}\n行为：禁言{}次\n已自动退群".format(self.se.get("group_id"), self.groupSettings.get("connectQQ"), int(self.groupSettings.get("bannedCount"))+1))
 
 increaseVerifyList = []
