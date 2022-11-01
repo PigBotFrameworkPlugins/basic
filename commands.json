@@ -121,7 +121,7 @@
 {
     "content": "机器人公告 ",
     "usage": "机器人公告 <内容>",
-    "promise": "anyone",
+    "promise": "xzy",
     "eval": "basic.notice()",
     "description": "给所有机器人实例的所有群发送公告",
     "mode": "机器人操作",
