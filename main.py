@@ -99,7 +99,10 @@ class basic(bot):
         uid = self.se.get('user_id')
         gid = self.se.get('group_id')
         
+        print(self.commandmode)
         self.chushihuacd()
+        print(self.commandmode)
+        
         message = '[CQ:face,id=151]{0}-菜单'.format(self.botSettings.get('name'))
         num = 1
         for i in self.commandmode:
