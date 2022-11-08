@@ -195,7 +195,7 @@ class basic(bot):
             # 消息防撤回
             data = self.CallApi('get_msg', {"message_id":se.get('message_id')})
             if self.weijinWhileFunc(data.get('data').get('message')) == False and 'http' not in data.get('data').get('message'):
-                self.send('[CQ:face,id=54] 消息防撤回\n[CQ:at,qq='+str(se.get('operator_id'))+'] 撤回了 [CQ:at,qq='+str(se.get('user_id'))+'] 发送的一条消息\n撤回的消息内容：'+str(data.get('data').get('message')))
+                self.send('[CQ:face,id=54] 消息防撤回\n[CQ:at,qq='+str(se.get('operator_id'))+'] 撤回了 [CQ:at,qq='+str(se.get('user_id'))+'] 发送的一条消息\n撤回的消息内容：[|'+str(data.get('data').get('message'))+'|]')
             else:
                 self.send('[CQ:at,qq='+str(se.get('operator_id'))+'] 撤回了 [CQ:at,qq='+str(se.get('user_id'))+'] 发送的一条不可见人的消息')
             
@@ -210,7 +210,7 @@ class basic(bot):
         elif se.get('notice_type') == 'group_increase':
             # 有人进群
             if settings.get('increase') != 0:
-                self.send('[CQ:at,qq='+str(se.get('user_id'))+'] '+str(settings.get('increase_notice')))
+                self.send('[CQ:at,qq='+str(se.get('user_id'))+'] [|'+str(settings.get('increase_notice'))+'|]')
             if settings.get('increase_verify') != 0:
                 self.increaseVerify()
             
