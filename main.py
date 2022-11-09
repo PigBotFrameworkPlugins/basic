@@ -217,9 +217,18 @@ class basic(bot):
         elif se.get('notice_type') == 'group_decrease' and settings.get('decrease') != 0:
             # 有人退群
             if se.get('sub_type') == 'leave':
-                self.send('成员 '+str(se.get('user_id'))+' 主动离开了本群。')
+                message = self.groupSettings.get("decrease_notice_leave")
+                if "{user}" in message:
+                    message = message.replace("{user}", "[|{}|]".format(se.get('user_id')))
+                self.send(message)
+            
             elif 'kick' in se.get('sub_type'):
-                self.send('成员 '+str(se.get('user_id'))+' 被 [CQ:at,qq='+str(se.get('operator_id'))+'] 踢出了本群。')
+                message = self.groupSettings.get("decrease_notice_kick")
+                if "{user}" in message:
+                    message = message.replace("{user}", "[|{}|]".format(se.get('user_id')))
+                if "{operator}" in message:
+                    message = message.replace("{operator}", "[CQ:at,qq={}]".format(se.get('operator_id')))
+                self.send(message)
         
         elif se.get('notice_type') == 'essence':
             # 精华消息
