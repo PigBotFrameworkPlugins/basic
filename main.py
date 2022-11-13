@@ -115,7 +115,8 @@ class basic(bot):
         
         # message += '\n[CQ:face,id=54] 发送上面的选项名（注意大小写，不包括[]中括号）即可查看对应的详细指令列表\n在使用指令时尖括号(<>)和方括号分别表示必须的项和可选的项，使用指令时不需要带有这些括号！'
         message += '\n\n[ {0} POWERED BY PIGBOTFRAMEWORK ]'.format(self.botSettings.get('name'))
-        self.send(message)
+        if self.args[-1] != "noreply":
+            self.send(message)
         
     def changePromise(self):
         uuid = self.uuid
