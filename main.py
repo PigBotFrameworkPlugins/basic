@@ -328,7 +328,14 @@ class basic(bot):
         self.WriteCommandListener(args=args)
     
     def weather(self):
-        return "yin"
+        def getWeather(name="北京"):
+            url = 'http://wthrcdn.etouch.cn/weather_mini'
+            response = requests.get(url, {'city': name})
+            result = json.loads(response.content.decode())
+            return '{}'.format(result)
+
+        self.CrashReport("process successfully!", "chatterbot")
+        return getWeather()
         
     def checkBan(self):
         if self.se.get("sub_type") == "lift_ban":
