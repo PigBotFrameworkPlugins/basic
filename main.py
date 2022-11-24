@@ -2,7 +2,7 @@ import sys, time, traceback, datetime, random, requests
 sys.path.append('../..')
 from bot import bot, commandlist, commandPluginsList, ChatterBot, ListTrainer
 from fabot import reloadPlugins, yamldata
-import nsfw.classify_nsfw as nsfw
+# import nsfw.classify_nsfw as nsfw
 
 class basic(bot):
     def printConfig(self):
