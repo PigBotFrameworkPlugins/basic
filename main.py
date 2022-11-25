@@ -300,8 +300,9 @@ class basic(bot):
                     for i in groupList:
                         self.CrashReport(i.get("group_name"), "bot notice")
                         self.SendOld(None, self.message, gid=i.get("group_id"), timeout=5)
+                        time.sleep(1+random.randint(0, 1))
                 except Exception:
-                    pass
+                    self.CrashReport(e, "bot notice")
         except Exception as e:
             self.CrashReport(traceback.format_exc(), "bot notice")
     
@@ -329,10 +330,11 @@ class basic(bot):
     
     def weather(self):
         def getWeather(name="北京"):
-            url = 'http://wthrcdn.etouch.cn/weather_mini'
-            response = requests.get(url, {'city': name})
-            result = json.loads(response.content.decode())
-            return '{}'.format(result)
+            # url = 'http://wthrcdn.etouch.cn/weather_mini'
+            # response = requests.get(url, {'city': name})
+            # result = json.loads(response.content.decode())
+            # return '{}'.format(result)
+            return "获取天气失败"
 
         self.CrashReport("process successfully!", "chatterbot")
         return getWeather()
