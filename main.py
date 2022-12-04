@@ -18,7 +18,7 @@ class basic(bot):
             message += '\n[CQ:face,id=54] '+str(i.get('name'))+'：[|'+str(i.get('description'))+'|]\n     值：[|'+str(settings.get(i.get('description')))+'|]'
             if i.get('other') != '':
                 message += '\n     描述：'+str(i.get('other'))
-        message += '\n\n[CQ:face,id=189] [|请使用 set 指令修改配置|]\n[|例如：set recallFlag===0 即为设置取消防撤回功能|]'
+        # message += '\n\n[CQ:face,id=189] [|请使用 set 指令修改配置|]\n[|例如：set recallFlag===0 即为设置取消防撤回功能|]'
         self.send(message)
         
     def runFunc(self):
