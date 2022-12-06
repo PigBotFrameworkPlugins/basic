@@ -109,11 +109,11 @@
     "type": "notice"
 },
 {
-    "content": "程序运行时间",
-    "usage": "程序运行时间",
-    "promise": "anyone",
-    "eval": "basic.pythonTime()",
-    "description": "",
+    "content": "图片菜单",
+    "usage": "图片菜单",
+    "promise": "xzy",
+    "eval": "basic.cd3()",
+    "description": "发送一个图片菜单",
     "mode": "机器人操作",
     "isHide": 0,
     "type": "command"

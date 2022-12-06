@@ -283,8 +283,8 @@ class basic(bot):
                 return True
         return False
     
-    def pythonTime(self):
-        self.send(time.ctime())
+    def cd3(self):
+        pass
     
     def notice(self):
         self.CrashReport("bot notice")
