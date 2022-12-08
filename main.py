@@ -202,11 +202,10 @@ class basic(bot):
             
         elif se.get('notice_type') == 'notify':
             # 戳机器人
-            if se.get('sub_type') == 'poke' and se.get('target_id') == botSettings.get('myselfqn'):
-                if random.randint(0, 2) == 1:
-                    self.send('[CQ:at,qq='+str(se.get('user_id'))+'] 我爱你，別戳了！')
-                else:
-                    self.send('[CQ:at,qq='+str(se.get('user_id'))+'] 不要再戳我啦！')
+            if se.get('sub_type') == 'poke' and se.get('target_id') == botSettings.get('myselfqn') and botSettings.get("chuo"):
+                chuo = botSettings.get("chuo").split()
+                chuoReply = chuo[random.randint(0, len(chuo)-1)]
+                self.send(f"[CQ:at,qq={se.get('user_id')}] {chuoReply}")
                 
         elif se.get('notice_type') == 'group_increase':
             # 有人进群
