@@ -102,7 +102,7 @@ class basic(bot):
         print(self.commandmode)
         self.chushihuacd()
         print(self.commandmode)
-        # self.CrashReport(self.commandmode)
+        self.CrashReport(self.commandmode)
         
         message = '[CQ:face,id=151]{0}-菜单'.format(self.botSettings.get('name'))
         num = 1
