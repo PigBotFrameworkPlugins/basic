@@ -211,7 +211,19 @@ class basic(bot):
         elif se.get('notice_type') == 'group_increase':
             # 有人进群
             if settings.get('increase') != 0:
-                self.send('[CQ:at,qq='+str(se.get('user_id'))+'] [|'+str(settings.get('increase_notice'))+'|]')
+                message = f"[CQ:at,qq={se.get('user_id')}] [|{settings.get('increase_notice')}|]"
+                userdata = self.CallApi("get_stranger_info", {'user_id':uid}).get("data")
+                replaceList = [
+                    ["{user}", uid],
+                    ["{userimg}", f"[CQ:image,cache=0,url=http://q1.qlogo.cn/g?b=qq&nk={uid}&s=100,file=http://q1.qlogo.cn/g?b=qq&nk={uid}&s=100]"],
+                    ["{username}", userdata.get("nickname")],
+                    ["{userlevel}", userdata.get("level")]
+                ]
+                for i in replaceList:
+                    if i[0] in message:
+                        message = message.replace(i[0], "[|{}|]".format(i[1]))
+                
+                self.send(message)
             if settings.get('increase_verify') != 0:
                 self.increaseVerify()
             
@@ -219,16 +231,33 @@ class basic(bot):
             # 有人退群
             if se.get('sub_type') == 'leave':
                 message = self.groupSettings.get("decrease_notice_leave")
-                if "{user}" in message:
-                    message = message.replace("{user}", "[|{}|]".format(se.get('user_id')))
+                userdata = self.CallApi("get_stranger_info", {'user_id':uid}).get("data")
+                replaceList = [
+                    ["{user}", uid],
+                    ["{userimg}", f"[CQ:image,cache=0,url=http://q1.qlogo.cn/g?b=qq&nk={uid}&s=100,file=http://q1.qlogo.cn/g?b=qq&nk={uid}&s=100]"],
+                    ["{username}", userdata.get("nickname")],
+                    ["{userlevel}", userdata.get("level")]
+                ]
+                for i in replaceList:
+                    if i[0] in message:
+                        message = message.replace(i[0], "[|{}|]".format(i[1]))
+                
                 self.send(message)
             
             elif 'kick' in se.get('sub_type'):
                 message = self.groupSettings.get("decrease_notice_kick")
-                if "{user}" in message:
-                    message = message.replace("{user}", "[|{}|]".format(se.get('user_id')))
-                if "{operator}" in message:
-                    message = message.replace("{operator}", "[CQ:at,qq={}]".format(se.get('operator_id')))
+                userdata = self.CallApi("get_stranger_info", {'user_id':uid}).get("data")
+                replaceList = [
+                    ["{user}", uid],
+                    ["{userimg}", f"[CQ:image,cache=0,url=http://q1.qlogo.cn/g?b=qq&nk={uid}&s=100,file=http://q1.qlogo.cn/g?b=qq&nk={uid}&s=100]"],
+                    ["{username}", userdata.get("nickname")],
+                    ["{userlevel}", userdata.get("level")],
+                    ["{operator}", se.get("operator")]
+                ]
+                for i in replaceList:
+                    if i[0] in message:
+                        message = message.replace(i[0], "[|{}|]".format(i[1]))
+                
                 self.send(message)
         
         elif se.get('notice_type') == 'essence':
